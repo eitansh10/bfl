@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>פורטל אחים לחיים</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        /* אזורים */
+        --color-north: #007f00;
+        --color-south: #830000;
+        --color-jerusalem: #bfbd08;
+        --color-center: #02407d;
+        --whatsapp: #25d366;
+        --waze: #33ccff;
+
+        /* Light Theme */
+        --app-bg: #f4f7f6;
+        --card-bg: #ffffff;
+        --primary: #002d62;
+        --secondary: #00509e;
+        --accent: #e2e8f0;
+        --text-main: #1a202c;
+        --text-muted: #4a5568;
+        --nav-bg: #ffffff;
+        --input-bg: #edf2f7;
+      }
+
+      [data-theme='dark'] {
+        /* Dark Theme */
+        --app-bg: #121212;
+        --card-bg: #1e1e24;
+        --primary: #4a90e2;
+        --secondary: #63b3ed;
+        --accent: #2d3748;
+        --text-main: #e2e8f0;
+        --text-muted: #a0aec0;
+        --nav-bg: #1a202c;
+        --input-bg: #2d3748;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Assistant', sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background-color: #cbd5e0;
+        color: var(--text-main);
+        display: flex;
+        justify-content: center;
+        transition: 0.3s;
+      }
+
+      .app-container {
+        width: 100%;
+        max-width: 480px;
+        background-color: var(--app-bg);
+        min-height: 100vh;
+        position: relative;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 90px;
+        transition: background-color 0.3s;
+      }
+
+      /* --- Header & Smooth Scroll Animations (No Jitter) --- */
+      .header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 1.5rem;
+        text-align: center;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        transition: border-radius 0.3s ease;
+      }
+
+      .header.scrolled {
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+      }
+
+      .theme-toggle {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.8);
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .logo-img {
+        max-width: 140px;
+        margin-bottom: 0.5rem;
+        /* הסרנו אנימציות הקטנה כדי למנוע רעידות בדפדפן */
+      }
+
+      .header-greeting {
+        transition: all 0.3s ease;
+        max-height: 100px;
+        opacity: 1;
+        overflow: hidden;
+      }
+      .header.scrolled .header-greeting {
+        max-height: 0;
+        opacity: 0;
+        margin: 0;
+      }
+
+      .greeting-time {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .greeting-name {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #ffffff;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+      }
+
+      .search-bar {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        padding: 10px 15px;
+        font-size: 1rem;
+        color: #ffffff;
+        text-align: right;
+        margin-bottom: 0;
+        transition: all 0.3s ease;
+        outline: none;
+      }
+      .search-bar::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .search-bar:focus {
+        background: rgba(255, 255, 255, 0.25);
+      }
+
+      /* --- Monthly Update Banner & Shimmer --- */
+      .bulletin-banner {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 15px;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-decoration: none;
+        margin: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--accent);
+        position: relative;
+        overflow: hidden;
+      }
+      .bulletin-banner:active {
+        transform: scale(0.98);
+      }
+
+      .bulletin-banner::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.6) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        transform: rotate(30deg) translateY(-50%);
+        animation: shimmer 4s infinite;
+        pointer-events: none;
+      }
+      [data-theme='dark'] .bulletin-banner::after {
+        background: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.1) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+      }
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%) rotate(30deg);
+        }
+        100% {
+          transform: translateX(100%) rotate(30deg);
+        }
+      }
+
+      .bulletin-text h3 {
+        font-size: 1.1rem;
+        margin-bottom: 2px;
+        font-weight: 800;
+      }
+      .bulletin-text p {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+      }
+      .bulletin-icon {
+        font-size: 1.8rem;
+        color: var(--secondary);
+      }
+
+      /* --- Tabs & Animations --- */
+      .tab-content {
+        display: none;
+        padding: 0 1rem 1.5rem;
+      }
+      .tab-content.active {
+        display: block;
+      }
+
+      @keyframes slideUpFade {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .tab-content.active .list-item {
+        animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+      }
+      .list-item:nth-child(1) {
+        animation-delay: 0.05s;
+      }
+      .list-item:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .list-item:nth-child(3) {
+        animation-delay: 0.15s;
+      }
+      .list-item:nth-child(4) {
+        animation-delay: 0.2s;
+      }
+      .list-item:nth-child(5) {
+        animation-delay: 0.25s;
+      }
+      .list-item:nth-child(n + 6) {
+        animation-delay: 0.3s;
+      }
+
+      body.is-searching .tab-content {
+        padding-top: 1rem;
+      }
+      body.is-searching .section-description {
+        display: none;
+      }
+      body.is-searching .list-item {
+        animation: none !important;
+        opacity: 1;
+        transform: none;
+      }
+
+      .section-title {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--secondary);
+        margin: 1.5rem 0.5rem 0.5rem 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .section-description {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin: 0 0.5rem 1rem 0;
+        padding-right: 0.8rem;
+        border-right: 3px solid var(--secondary);
+        background: rgba(226, 232, 240, 0.1);
+        padding: 0.8rem;
+        border-radius: 8px 0 0 8px;
+      }
+
+      /* --- List Groups & Items --- */
+      .list-group {
+        background: var(--card-bg);
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1rem;
+        border: 1px solid var(--accent);
+        overflow: hidden;
+      }
+      .list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid var(--accent);
+        position: relative;
+        gap: 10px;
+      }
+      .list-item:last-child {
+        border-bottom: none;
+      }
+      .border-north {
+        border-right: 5px solid var(--color-north);
+      }
+      .border-south {
+        border-right: 5px solid var(--color-south);
+      }
+      .border-jerusalem {
+        border-right: 5px solid var(--color-jerusalem);
+      }
+      .border-center {
+        border-right: 5px solid var(--color-center);
+      }
+
+      .item-icon {
+        font-size: 1.3rem;
+        width: 35px;
+        text-align: center;
+        color: var(--secondary);
+      }
+      .item-info {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        flex-grow: 1;
+      }
+      .item-name {
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .item-role {
+        font-weight: 600;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      .item-details {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .region-badge {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: white;
+        font-weight: bold;
+      }
+      .bg-north {
+        background-color: var(--color-north);
+      }
+      .bg-south {
+        background-color: var(--color-south);
+      }
+      .bg-jerusalem {
+        background-color: var(--color-jerusalem);
+      }
+      .bg-center {
+        background-color: var(--color-center);
+      }
+
+      /* --- Actions (Buttons) --- */
+      .actions-bar {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.2rem;
+        text-decoration: none;
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color 0.2s;
+      }
+      .action-btn:hover {
+        transform: scale(1.1);
+      }
+      .action-btn:active {
+        transform: scale(0.9);
+      }
+      .btn-wa {
+        background-color: var(--whatsapp);
+      }
+      .btn-waze {
+        background-color: var(--waze);
+      }
+
+      .community-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(37, 211, 102, 0.1);
+        border: 1px solid rgba(37, 211, 102, 0.3);
+        padding: 12px 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--text-main);
+        font-weight: 700;
+        margin-bottom: 8px;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background 0.2s;
+      }
+      .community-btn .comm-icon {
+        font-size: 1.2rem;
+        color: var(--primary);
+        width: 25px;
+        text-align: center;
+      }
+      .community-btn span {
+        flex-grow: 1;
+      }
+      .community-btn .wa-icon {
+        font-size: 1.4rem;
+        color: var(--whatsapp);
+      }
+      .community-btn:active {
+        transform: scale(0.98);
+        background: rgba(37, 211, 102, 0.2);
+      }
+
+      /* --- Bottom Navigation --- */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        max-width: 480px;
+        background: var(--nav-bg);
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom));
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+        border-top: 1px solid var(--accent);
+        z-index: 100;
+        transition: 0.3s;
+      }
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--nav-inactive);
+        font-weight: 700;
+        gap: 4px;
+        cursor: pointer;
+        width: 20%;
+        transition: color 0.2s;
+      }
+      .nav-item span {
+        font-size: 0.68rem;
+        text-align: center;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .nav-item i {
+        font-size: 1.25rem;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .nav-item.active {
+        color: var(--nav-active);
+      }
+      .nav-item.active i {
+        transform: scale(1.25) translateY(-2px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <header class="header">
+        <button class="theme-toggle" onclick="toggleTheme()">
+          <i class="fas fa-moon" id="theme-icon"></i>
+        </button>
+        <img
+          src="https://i.postimg.cc/N0ZN401d/logo.png"
+          alt="לוגו אחים לחיים"
+          class="logo-img"
+        />
+        <div class="header-greeting">
+          <div id="greeting-time" class="greeting-time">אח יקר,</div>
+          <div id="greeting-name" class="greeting-name">שלום!</div>
+        </div>
+        <input
+          type="text"
+          class="search-bar"
+          id="searchInput"
+          placeholder="חיפוש חופשי (למשל: יוגב, צפון, כדורגל)..."
+          oninput="filterItems()"
+        />
+      </header>
+
+      <a href="https://lp6.me/dbzhE" class="bulletin-banner" target="_top">
+        <div class="bulletin-text">
+          <h3>ההודעה החודשית 📰</h3>
+          <p>היכנס עכשיו להודעה החודשית האחרונה!</p>
+        </div>
+        <div class="bulletin-icon"><i class="fas fa-chevron-left"></i></div>
+      </a>
+
+      <main>
+        <section id="tab-houses" class="tab-content active">
+          <div class="section-title search-group-title">
+            <i class="fas fa-home"></i> בתי האחים
+          </div>
+          <div class="list-group">
+            <div class="list-item border-center search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  כפר טרומן <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-details">
+                  <i class="far fa-clock"></i> א'-ה' 09:00-19:00
+                </div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://waze.com/ul?q=כפר+טרומן"
+                  target="_top"
+                  class="action-btn btn-waze"
+                  ><i class="fab fa-waze"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-north search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  קיבוץ אלונים <span class="region-badge bg-north">צפון</span>
+                </div>
+                <div class="item-details">
+                  <i class="far fa-clock"></i> א'-ה' 08:00-18:00
+                </div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://waze.com/ul?q=קיבוץ+אלונים"
+                  target="_top"
+                  class="action-btn btn-waze"
+                  ><i class="fab fa-waze"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-south search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  משמר הנגב <span class="region-badge bg-south">דרום</span>
+                </div>
+                <div class="item-details">
+                  <i class="far fa-clock"></i> א'+ב' 09:00-19:00
+                </div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://waze.com/ul?q=משמר+הנגב"
+                  target="_top"
+                  class="action-btn btn-waze"
+                  ><i class="fab fa-waze"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title search-group-title">
+            <i class="fas fa-map-marked-alt"></i> מנהלי אזורים
+          </div>
+          <div class="list-group">
+            <div class="list-item border-north search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  יוגב מור <span class="region-badge bg-north">אלונים</span>
+                </div>
+                <div class="item-role">מנהל אלונים ואחראי איזורים</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-jerusalem search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  מאיר אפללו
+                  <span class="region-badge bg-jerusalem">ירושלים</span>
+                </div>
+                <div class="item-role">ראש איזור ירושלים</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/ku4ol1"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-south search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  רפאל קלן <span class="region-badge bg-south">דרום</span>
+                </div>
+                <div class="item-role">אחראי מחוז דרום</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-south search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  קובי חזן <span class="region-badge bg-south">דרום</span>
+                </div>
+                <div class="item-role">רכז חברתי דרום</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/oho5k1"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-north search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  פיני שוורצמן <span class="region-badge bg-north">צפון</span>
+                </div>
+                <div class="item-role">ראש איזור צפון</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-north search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  יקיר טוויג <span class="region-badge bg-north">צפון</span>
+                </div>
+                <div class="item-role">רכז חברתי צפון</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/x708vl"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-medical" class="tab-content">
+          <div class="section-title search-group-title">
+            <i class="fas fa-heartbeat"></i> התחום הרפואי
+          </div>
+          <div class="section-description">
+            ייעוץ רפואי פיזי ונפשי, חוות דעת שנייה, משלחות, מסעות חוסן וצמיחה,
+            טיפולים ועוד.
+          </div>
+          <div class="list-group">
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">תמיר מובשוביץ</div>
+                <div class="item-role">מנהל התחום הרפואי</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/cm5ulw"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">מאור צברי</div>
+                <div class="item-role">מנהל הפרויקט הנפשי</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/g0h7mw"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">ענבל שר שלום</div>
+                <div class="item-role">רכזת טיפולים</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/2plihi"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-north search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  ינאי סלוצקי <span class="region-badge bg-north">צפון</span>
+                </div>
+                <div class="item-role">נציג טיפולים</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/874fms"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-south search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  ימית סולטן <span class="region-badge bg-south">דרום</span>
+                </div>
+                <div class="item-role">נציגת טיפולים</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/t2eu92"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-career" class="tab-content">
+          <div class="section-title search-group-title">
+            <i class="fas fa-briefcase"></i> קריירה וכלכלה
+          </div>
+          <div class="section-description">
+            הדרכה כלכלית, ייעוץ משכנתאות, תכנון פיננסי, הכשרות מקצועיות ופיתוח
+            קריירה.
+          </div>
+          <div class="list-group">
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">עוז רונן</div>
+                <div class="item-role">מנהל תחום קריירה וכלכלה</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/vm85xf"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">עדי זימרי</div>
+                <div class="item-role">רכז פרויקט הדרכה כלכלית</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/x9zlh3"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">גיא זגל</div>
+                <div class="item-role">אחראי תוכנית המלגות</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/anv78a"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">רועי לוי</div>
+                <div class="item-role">רכז קשרי מעסיקים</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/r6kazr"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-north search-item">
+              <div class="item-info">
+                <div class="item-name">
+                  איתי אדלשטיין
+                  <span class="region-badge bg-north">אלונים</span>
+                </div>
+                <div class="item-role">רכז קריירה וכלכלה באלונים</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/me93mk"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-activities" class="tab-content">
+          <div class="section-title search-group-title">
+            <i class="fas fa-users"></i> קהילות הוואטסאפ
+          </div>
+          <div style="margin-bottom: 2rem">
+            <a
+              href="https://chat.whatsapp.com/"
+              target="_top"
+              class="community-btn search-item"
+              ><i class="fas fa-car comm-icon"></i><span>קהילת הטרמפים</span
+              ><i class="fab fa-whatsapp wa-icon"></i
+            ></a>
+            <a
+              href="https://chat.whatsapp.com/"
+              target="_top"
+              class="community-btn search-item"
+              ><i class="fas fa-user-friends comm-icon"></i
+              ><span>פרוייקט "בנות הזוג"</span
+              ><i class="fab fa-whatsapp wa-icon"></i
+            ></a>
+            <a
+              href="https://chat.whatsapp.com/"
+              target="_top"
+              class="community-btn search-item"
+              ><i class="fas fa-stopwatch comm-icon"></i
+              ><span>קהילת "הדקה ה-90"</span
+              ><i class="fab fa-whatsapp wa-icon"></i
+            ></a>
+            <a
+              href="https://chat.whatsapp.com/"
+              target="_top"
+              class="community-btn search-item"
+              ><i class="fas fa-lightbulb comm-icon"></i
+              ><span>קהילת "היזמויות"</span
+              ><i class="fab fa-whatsapp wa-icon"></i
+            ></a>
+            <a
+              href="https://chat.whatsapp.com/"
+              target="_top"
+              class="community-btn search-item"
+              ><i class="fas fa-handshake comm-icon"></i
+              ><span>קהילת "מעבירים הלאה"</span
+              ><i class="fab fa-whatsapp wa-icon"></i
+            ></a>
+            <a
+              href="https://chat.whatsapp.com/"
+              target="_top"
+              class="community-btn search-item"
+              ><i class="fas fa-shield-alt comm-icon"></i
+              ><span>קהילת חרבות ברזל</span
+              ><i class="fab fa-whatsapp wa-icon"></i
+            ></a>
+            <a
+              href="https://chat.whatsapp.com/"
+              target="_top"
+              class="community-btn search-item"
+              ><i class="fas fa-brain comm-icon"></i
+              ><span>קהילת הפרויקט הנפשי</span
+              ><i class="fab fa-whatsapp wa-icon"></i
+            ></a>
+            <a
+              href="https://chat.whatsapp.com/"
+              target="_top"
+              class="community-btn search-item"
+              ><i class="fas fa-spa comm-icon"></i><span>קהילת הטיפולים</span
+              ><i class="fab fa-whatsapp wa-icon"></i
+            ></a>
+            <a
+              href="https://chat.whatsapp.com/"
+              target="_top"
+              class="community-btn search-item"
+              ><i class="fas fa-pray comm-icon"></i><span>קבוצת התפילות</span
+              ><i class="fab fa-whatsapp wa-icon"></i
+            ></a>
+          </div>
+
+          <div class="section-title search-group-title">
+            <i class="fas fa-running"></i> ספורט ומשחקי כדור
+          </div>
+          <div class="list-group">
+            <div class="list-item search-item">
+              <div class="item-icon"><i class="fas fa-running"></i></div>
+              <div class="item-info">
+                <div class="item-name">גל בן דוד</div>
+                <div class="item-role">מנהל תחום ספורט ופנאי</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/ix0q5w"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-futbol"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  אהוד אנטמן <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">כדורגל (רמה"ש)</div>
+                <div class="item-details">א' 20:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/o9l6vr"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-south search-item">
+              <div class="item-icon"><i class="fas fa-futbol"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  אלעד פסט <span class="region-badge bg-south">דרום</span>
+                </div>
+                <div class="item-role">כדורגל (גולטיים ב"ש)</div>
+                <div class="item-details">א' 19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-north search-item">
+              <div class="item-icon"><i class="fas fa-futbol"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  מוטי דהן <span class="region-badge bg-north">צפון</span>
+                </div>
+                <div class="item-role">כדורגל (חיפה)</div>
+                <div class="item-details">א' 20:30</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-jerusalem search-item">
+              <div class="item-icon"><i class="fas fa-futbol"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  מאיר אפללו
+                  <span class="region-badge bg-jerusalem">ירושלים</span>
+                </div>
+                <div class="item-role">כדורגל (כפר אדומים)</div>
+                <div class="item-details">א' 20:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/ku4ol1"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon">
+                <i class="fas fa-basketball-ball"></i>
+              </div>
+              <div class="item-info">
+                <div class="item-name">
+                  שחר גורפיין <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">כדורסל (שוהם)</div>
+                <div class="item-details">ג' 20:30</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-table-tennis"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  אוריאל דניאל <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">טניס שולחן (לוד)</div>
+                <div class="item-details">ב' 19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-table-tennis"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  אופיר סעדה <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">טניס (רעננה)</div>
+                <div class="item-details">ג' 19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-north search-item">
+              <div class="item-icon"><i class="fas fa-table-tennis"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  ניר ברק <span class="region-badge bg-north">צפון</span>
+                </div>
+                <div class="item-role">פאדל (חיפה)</div>
+                <div class="item-details">ד' 19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-table-tennis"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  דורון קוטה <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">פאדל (כפר המכביה)</div>
+                <div class="item-details">ד' 20:00</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title search-group-title">
+            <i class="fas fa-dumbbell"></i> כושר, ריצה ולחימה
+          </div>
+          <div class="list-group">
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-running"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  נדב בן גל <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">ריצה (ת"א)</div>
+                <div class="item-details">ב' 05:45</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/iruqc2"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-south search-item">
+              <div class="item-icon"><i class="fas fa-running"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  יוגב הסמן פרץ <span class="region-badge bg-south">דרום</span>
+                </div>
+                <div class="item-role">ריצה (ב"ש)</div>
+                <div class="item-details">ג' 20:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/tqe1lj"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-north search-item">
+              <div class="item-icon"><i class="fas fa-running"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  נתנאל שגב <span class="region-badge bg-north">צפון</span>
+                </div>
+                <div class="item-role">ריצה (חיפה)</div>
+                <div class="item-details">ג' 17:00</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-running"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  רפאל קלן <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">ריצה (בטרומן)</div>
+                <div class="item-details">ג' 06:30</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-dumbbell"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  אלון פרידמן <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">קרוספיט (ת"א)</div>
+                <div class="item-details">20:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/e5u8ed"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-dumbbell"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  תמיר גלעד <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">חדר כושר (טרומן)</div>
+                <div class="item-details">א'-ה' 07:00-19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/6azp5k"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-north search-item">
+              <div class="item-icon"><i class="fas fa-dumbbell"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  נתנאל שגב <span class="region-badge bg-north">צפון</span>
+                </div>
+                <div class="item-role">חדר כושר (אלונים)</div>
+                <div class="item-details">א'-ה' 07:00-19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-hand-rock"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  עמוס אלגלי <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">איגרוף (שוהם)</div>
+                <div class="item-details">ב' 20:30</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-jerusalem search-item">
+              <div class="item-icon"><i class="fas fa-hand-rock"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  אושרי בן ארוש
+                  <span class="region-badge bg-jerusalem">ירושלים</span>
+                </div>
+                <div class="item-role">איגרוף תאילנדי</div>
+                <div class="item-details">20:30</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/mxm8ey"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-hand-rock"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  ניב קשת <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">MMA (כפ"ס)</div>
+                <div class="item-details">ג' 19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/vu6vdr"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title search-group-title">
+            <i class="fas fa-water"></i> ים, מים ואקסטרים
+          </div>
+          <div class="list-group">
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-swimmer"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  רועי רקובסקי <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">שחיה (גני תקווה)</div>
+                <div class="item-details">ב' 19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/sfzx9s"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-swimmer"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  ישי וייסברג <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">שחיה (הרצליה)</div>
+                <div class="item-details">א' 19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/km51s9"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-jerusalem search-item">
+              <div class="item-icon"><i class="fas fa-swimmer"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  ידידיה זומר
+                  <span class="region-badge bg-jerusalem">ירושלים</span>
+                </div>
+                <div class="item-role">שחיה</div>
+                <div class="item-details">א' 19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/ygrzkd"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-north search-item">
+              <div class="item-icon"><i class="fas fa-swimmer"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  ירין מוסקוביץ' <span class="region-badge bg-north">צפון</span>
+                </div>
+                <div class="item-role">שחיה (דניה)</div>
+                <div class="item-details">08:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/y5m1l8"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-water"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  תומר סעדה <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">גלישת גלים (ת"א)</div>
+                <div class="item-details">ו' 06:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/uf2f54"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-north search-item">
+              <div class="item-icon"><i class="fas fa-water"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  עמי וזאנה <span class="region-badge bg-north">צפון</span>
+                </div>
+                <div class="item-role">גלישת גלים (חיפה)</div>
+                <div class="item-details">זמנים משתנים</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/0m3jbu"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-icon"><i class="fas fa-mask"></i></div>
+              <div class="item-info">
+                <div class="item-name">יניב סוויסה</div>
+                <div class="item-role">צלילה</div>
+                <div class="item-details">זמנים משתנים</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/r3ojsr"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-ship"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  יוחאי מלכה <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">קייאקים (ת"א)</div>
+                <div class="item-details">ה' 06:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/s5n9xj"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-ship"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  ברק מירון <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">הפלגות (הרצליה)</div>
+                <div class="item-details">ו' 19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/o3mo0b"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon">
+                <i class="fas fa-volleyball-ball"></i>
+              </div>
+              <div class="item-info">
+                <div class="item-name">
+                  גיא דן <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">פוצ'יוולי (ת"א)</div>
+                <div class="item-details">ד' 20:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/h4ww17"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-icon"><i class="fas fa-biking"></i></div>
+              <div class="item-info">
+                <div class="item-name">קובי ממו</div>
+                <div class="item-role">אופני כביש</div>
+                <div class="item-details">ו' 05:45</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-icon"><i class="fas fa-biking"></i></div>
+              <div class="item-info">
+                <div class="item-name">יוני דמרי</div>
+                <div class="item-role">אופני שטח</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/p4amda"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-jerusalem search-item">
+              <div class="item-icon"><i class="fas fa-biking"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  יותם פסט
+                  <span class="region-badge bg-jerusalem">ירושלים</span>
+                </div>
+                <div class="item-role">אופני שטח</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-south search-item">
+              <div class="item-icon"><i class="fas fa-biking"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  עירן טוויטו <span class="region-badge bg-south">דרום</span>
+                </div>
+                <div class="item-role">אופני שטח</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/jwwna4"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-biking"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  רובי שרעבי <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">אופני שטח (בטרומן)</div>
+                <div class="item-details">06:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/otpddy"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-center search-item">
+              <div class="item-icon"><i class="fas fa-mountain"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  גל רובך <span class="region-badge bg-center">מרכז</span>
+                </div>
+                <div class="item-role">טיפוס (כפ"ס/ת"א)</div>
+                <div class="item-details">ב'/ג' 19:00</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/jmyjf8"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title search-group-title">
+            <i class="fas fa-palette"></i> פנאי ואוהדים
+          </div>
+          <div class="list-group">
+            <div class="list-item search-item">
+              <div class="item-icon"><i class="fas fa-bullhorn"></i></div>
+              <div class="item-info">
+                <div class="item-name">איציק וקסלר</div>
+                <div class="item-role">אוהדים מכבי ת"א כדורגל</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/eyjhw4"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-icon"><i class="fas fa-bullhorn"></i></div>
+              <div class="item-info">
+                <div class="item-name">מאיר לוינגר</div>
+                <div class="item-role">אוהדים מכבי ת"א כדורסל</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-icon"><i class="fas fa-bullhorn"></i></div>
+              <div class="item-info">
+                <div class="item-name">מאיר אפללו</div>
+                <div class="item-role">אוהדים בית"ר ירושלים</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/ku4ol1"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-icon"><i class="fas fa-tree"></i></div>
+              <div class="item-info">
+                <div class="item-name">ניר יוסף</div>
+                <div class="item-role">סדנאות עץ</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item border-south search-item">
+              <div class="item-icon"><i class="fas fa-fish"></i></div>
+              <div class="item-info">
+                <div class="item-name">
+                  אבי קנטי <span class="region-badge bg-south">דרום</span>
+                </div>
+                <div class="item-role">דיג</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-icon"><i class="fas fa-language"></i></div>
+              <div class="item-info">
+                <div class="item-name">גל בן דוד</div>
+                <div class="item-role">מערך שפות</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/ix0q5w"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-icon"><i class="fas fa-guitar"></i></div>
+              <div class="item-info">
+                <div class="item-name">אסף אשכנזי</div>
+                <div class="item-role">שיעורי נגינה</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-icon"><i class="fas fa-helicopter"></i></div>
+              <div class="item-info">
+                <div class="item-name">רועי ויינברגר</div>
+                <div class="item-role">רחפנים</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-phones" class="tab-content">
+          <div class="section-title search-group-title">
+            <i class="fas fa-address-book"></i> אלפון צוות והנהלה
+          </div>
+          <div class="list-group">
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">יניב ליידנר</div>
+                <div class="item-role">מנכ"ל</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/48sz07"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">קובי ממו</div>
+                <div class="item-role">סמנכ"ל פיתוח והעצמה</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/h0ox0w"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">אמיר מלכה</div>
+                <div class="item-role">סמנכ"ל רכש ותפעול</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/ih1gyv"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">חמי רובין</div>
+                <div class="item-role">סמנכ"ל קשרי חוץ</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/nh7i5m"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">בן מרקוביץ'</div>
+                <div class="item-role">מנהל חברתי</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/6ersw5"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">מאור אלקובי</div>
+                <div class="item-role">מנהל קליטה</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/g16io3"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">רפאל קלן</div>
+                <div class="item-role">אחראי קליטה</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">אמיתי ניסניאן</div>
+                <div class="item-role">אחראי משלחות</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">תום שכטר</div>
+                <div class="item-role">אחראי IT</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">שניר פילוס</div>
+                <div class="item-role">פיתוח משאבים</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/jwwvto"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">אלון מדר</div>
+                <div class="item-role">מנהל רכש</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/ty95nt"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">תמיר גלעד</div>
+                <div class="item-role">אחראי חדר כושר</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/6azp5k"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">מאור צברי</div>
+                <div class="item-role">מנהל הפרויקט הנפשי</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/g0h7mw"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">אוריאל שוקרון</div>
+                <div class="item-role">רכז מתנדבים</div>
+              </div>
+              <div class="actions-bar">
+                <a href="https://wa.me/" target="_top" class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">ענבל שר שלום</div>
+                <div class="item-role">רכזת טיפולים</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/2plihi"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+            <div class="list-item search-item">
+              <div class="item-info">
+                <div class="item-name">תמיר מובשוביץ</div>
+                <div class="item-role">מנהל התחום הרפואי</div>
+              </div>
+              <div class="actions-bar">
+                <a
+                  href="https://wa.link/cm5ulw"
+                  target="_top"
+                  class="action-btn btn-wa"
+                  ><i class="fab fa-whatsapp"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('tab-houses', this)">
+          <i class="fas fa-home"></i><span>אזורים</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('tab-medical', this)">
+          <i class="fas fa-heartbeat"></i><span>התחום הרפואי</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('tab-career', this)">
+          <i class="fas fa-briefcase"></i><span>קריירה וכלכלה</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('tab-activities', this)">
+          <i class="fas fa-running"></i><span>פעילויות</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('tab-phones', this)">
+          <i class="fas fa-address-book"></i><span>טלפונים</span>
+        </div>
+      </nav>
+    </div>
+
+    <script>
+      // האדר עולה בעדינות
+      window.addEventListener('scroll', () => {
+        const header = document.querySelector('.header');
+        if (window.scrollY > 40) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+
+      // ברכת שלום דינמית לפי זמן
+      function updateGreeting() {
+        const hour = new Date().getHours();
+        let text = 'בוקר טוב';
+        if (hour >= 12 && hour < 17) text = 'צהריים טובים';
+        else if (hour >= 17 && hour < 21) text = 'ערב טוב';
+        else if (hour >= 21 || hour < 5) text = 'לילה טוב';
+        document.getElementById('greeting-name').innerText = text + '!';
+      }
+
+      // מעבר בין טאבים
+      function switchTab(tabId, element) {
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput.value !== '') {
+          searchInput.value = '';
+          filterItems();
+        }
+        document
+          .querySelectorAll('.tab-content')
+          .forEach((tab) => tab.classList.remove('active'));
+        document
+          .querySelectorAll('.nav-item')
+          .forEach((item) => item.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        if (element) element.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // חיפוש חכם גלובלי
+      function filterItems() {
+        const val = document.getElementById('searchInput').value.toLowerCase();
+        const isSearching = val.length > 0;
+        const body = document.body;
+
+        if (isSearching) {
+          body.classList.add('is-searching');
+        } else {
+          body.classList.remove('is-searching');
+        }
+
+        document.querySelectorAll('.tab-content').forEach((tab) => {
+          let hasVisible = false;
+          tab.querySelectorAll('.search-item').forEach((item) => {
+            const text = item.innerText.toLowerCase();
+            if (text.includes(val)) {
+              item.style.display = '';
+              hasVisible = true;
+            } else {
+              item.style.display = 'none';
+            }
+          });
+
+          if (isSearching) {
+            tab.style.display = hasVisible ? 'block' : 'none';
+          } else {
+            tab.style.display = tab.classList.contains('active')
+              ? 'block'
+              : 'none';
+            tab
+              .querySelectorAll('.search-item')
+              .forEach((item) => (item.style.display = ''));
+          }
+
+          if (isSearching) {
+            tab.querySelectorAll('.search-group-title').forEach((title) => {
+              const group = title.nextElementSibling;
+              if (
+                group &&
+                (group.classList.contains('list-group') ||
+                  group.tagName === 'DIV')
+              ) {
+                const hasVisibleItemsInGroup = Array.from(
+                  group.querySelectorAll('.search-item')
+                ).some((item) => item.style.display !== 'none');
+                title.style.display = hasVisibleItemsInGroup ? 'flex' : 'none';
+                group.style.display = hasVisibleItemsInGroup ? 'block' : 'none';
+              }
+            });
+          } else {
+            tab
+              .querySelectorAll('.search-group-title, .list-group, div')
+              .forEach((el) => {
+                if (el.style.display === 'none') el.style.display = '';
+              });
+          }
+        });
+      }
+
+      // החלפת נושא (יום/לילה)
+      function toggleTheme() {
+        const body = document.documentElement;
+        const icon = document.getElementById('theme-icon');
+        const isDark = body.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+          body.setAttribute('data-theme', 'light');
+          icon.className = 'fas fa-moon';
+          localStorage.setItem('achim_theme', 'light');
+        } else {
+          body.setAttribute('data-theme', 'dark');
+          icon.className = 'fas fa-sun';
+          localStorage.setItem('achim_theme', 'dark');
+        }
+      }
+
+      function loadTheme() {
+        const savedTheme = localStorage.getItem('achim_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('theme-icon').className =
+          savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        updateGreeting();
+        loadTheme();
+      });
+    </script>
+  </body>
+</html>
